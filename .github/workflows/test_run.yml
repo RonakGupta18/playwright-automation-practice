@@ -1,13 +1,12 @@
 name: Run Playwright Tests
 
-# Trigger: Run this whenever code is pushed to the 'main' branch
 on:
   push:
     branches: [ main ]
 
 jobs:
   test:
-    runs-on: ubuntu-latest # Use a Linux computer provided by GitHub
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
@@ -24,5 +23,13 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
 
-    - name: Run API Tests
+    - name: Run Booking Test
       run: npx playwright test tests/booking.spec.js
+
+    # --- ADD THIS NEW PART BELOW ---
+    - name: Upload Screenshot
+      uses: actions/upload-artifact@v4
+      if: always()   # Important: Do this even if the test fails!
+      with:
+        name: my-screenshot
+        path: booking_success.png
